@@ -1,0 +1,55 @@
+##Menu.h
+This is the right click menu 
+    menu handles its own hovering events and changes the "menuselect" bit string in toolbox
+    depending on what is being hovered. 
+    use the "menuselect" bit string when / handling left click events /
+
+##Toolbox.h
+This is the all purpose toolbox
+    Use Toolbox to keep track of info amongst other classes
+
+    !!this is where the drawing stacks are!!
+
+    push one of the drawing stacks to draw an object onto the screen
+
+    "menuselect" acts just like an array of /booleans
+
+##Handler.h
+Work on this   
+    The /handler is currently designed to handle "Nodes" and "Connections" 
+        
+        Handling pertains to:
+    
+        /Pushing to Drawing stack
+        /Tracking all the Nodes
+        /Tracking all teh Connections
+        //Connecting the Nodes using-
+            -what the Connections are Connecting to
+        //Moving the Nodes and Connections
+
+##Node.h
+Work on this
+    The Node class is currently designed to:
+
+    ~hold its "Drawable"
+    ~holds all the nodes it is connected to as a /pointer
+
+##Connection.h
+Work on this
+    The Connections class is currently designed to:
+    
+    ~hold | 2 | nodes
+    /or
+    ~hold | 1 | node and a mouse position
+
+    should hold its own /linkedlist to hold all the "wiring"
+    
+    "wiring" pertains to the boxes needed to connect one node to the other
+    needs to accept being moved (hence linked list)
+
+
+####################### Goals ###############################
+
+~save files
+~premades
+~visual memory stack

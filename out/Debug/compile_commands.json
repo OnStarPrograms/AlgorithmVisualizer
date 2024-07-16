@@ -1,0 +1,20 @@
+[
+{
+  "directory": "/home/onstar/Documents/AlgorithmVis/out/Debug",
+  "command": "/usr/bin/c++   -g -o CMakeFiles/Algo.dir/main.cpp.o -c /home/onstar/Documents/AlgorithmVis/main.cpp",
+  "file": "/home/onstar/Documents/AlgorithmVis/main.cpp",
+  "output": "CMakeFiles/Algo.dir/main.cpp.o"
+},
+{
+  "directory": "/home/onstar/Documents/AlgorithmVis/out/Debug",
+  "command": "/usr/bin/c++   -g -o CMakeFiles/Algo.dir/Node.cpp.o -c /home/onstar/Documents/AlgorithmVis/Node.cpp",
+  "file": "/home/onstar/Documents/AlgorithmVis/Node.cpp",
+  "output": "CMakeFiles/Algo.dir/Node.cpp.o"
+},
+{
+  "directory": "/home/onstar/Documents/AlgorithmVis/out/Debug",
+  "command": "/usr/bin/c++   -g -o CMakeFiles/Algo.dir/Handler.cpp.o -c /home/onstar/Documents/AlgorithmVis/Handler.cpp",
+  "file": "/home/onstar/Documents/AlgorithmVis/Handler.cpp",
+  "output": "CMakeFiles/Algo.dir/Handler.cpp.o"
+}
+]

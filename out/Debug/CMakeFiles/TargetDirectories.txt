@@ -1,0 +1,5 @@
+/home/onstar/Documents/AlgorithmVis/out/Debug/CMakeFiles/Algo.dir
+/home/onstar/Documents/AlgorithmVis/out/Debug/CMakeFiles/package.dir
+/home/onstar/Documents/AlgorithmVis/out/Debug/CMakeFiles/package_source.dir
+/home/onstar/Documents/AlgorithmVis/out/Debug/CMakeFiles/edit_cache.dir
+/home/onstar/Documents/AlgorithmVis/out/Debug/CMakeFiles/rebuild_cache.dir
