@@ -8,6 +8,7 @@ bool Handler::AddNode() {
   tempvec.x = tools.mousevec.x;
   tempvec.y = tools.mousevec.y;
   TempNode = Node(tempvec);
+  Nodes.push_back(TempNode);  
   return 0;
 };
 
@@ -21,7 +22,8 @@ void Handler::SetNode(){
 
 void Handler::FinishNode()
 {
-    Nodes.push_back(TempNode);  
+    TempNode.active = 0;
+    Nodes.pop_back();
 };
 
 bool Handler::SetUnconnectedConnection(Node fir_node, sf::Vector2f Mouser) {

@@ -20,6 +20,14 @@ class Handler
         void SetNode();
         
         void FinishNode();
+        bool IsActive()
+        {
+          if (TempNode.isactive() == 1)
+          {
+            return true;
+          }
+          return false;
+        };
         // make a sf::RederSquare and store all info in node
         bool SetUnconnectedConnection(Node fir_node, sf::Vector2f Mouser);
 
@@ -30,7 +38,6 @@ class Handler
             for (int i = 0; i < Nodes.size(); i++)
             {
                 tools.CircStack.push(*Nodes[i].GetDrawable());
-                tools.CircStack.push(*TempNode.GetDrawable());
             }
             for (int i = 0; i < Connections.size(); i++)
             {

@@ -1,7 +1,7 @@
+#include "Handler.h"
 #include "LinkedList.h"
 #include "Menu.h"
 #include "ToolBox.h"
-#include "Handler.h"
 #include <stdio.h>
 
 void Render();
@@ -30,7 +30,9 @@ int main() {
         }
       }
     }
-
+    if (tools.Handle->IsActive()) {
+      tools.Handle->SetNode();
+    }
     InputHandler();
     Render();
   }
@@ -53,7 +55,7 @@ void Render() {
   while (tools.RectStack.getSize() > 0) {
     tools.window->draw(tools.RectStack.pop());
   }
-  
+
   // end the .current frame
   tools.window->display();
 }
@@ -79,11 +81,17 @@ void InputHandler() {
                (event.type == sf::Event::KeyPressed)) {
       tools.menu &= 0b0;
     }
-    
-    if ((event.type == sf::Event::MouseButtonPressed) && 
+
+    if ((event.type == sf::Event::MouseButtonPressed) &&
         (event.mouseButton.button == sf::Mouse::Button::Left)) {
-      tools.Handle->AddNode();
-      tools.Handle->FinishNode();
+      if (tools.isKthBitSet(tools.menuselect, 0)) {
+        tools.Handle->AddNode();
+      }
+    }
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
+      if (tools.Handle->IsActive()) {
+        tools.Handle->FinishNode();
+      }
     }
   }
 }
