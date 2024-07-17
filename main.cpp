@@ -73,6 +73,17 @@ void InputHandler() {
     else if (event.type == sf::Event::Resized)
       tools.window->setView(
           sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
+    
+    if ((event.type == sf::Event::MouseButtonPressed) &&
+        (event.mouseButton.button == sf::Mouse::Button::Left)) {
+      if (tools.isKthBitSet(tools.menuselect, 0) && (tools.menu ^ 0b0) == 0b1) {
+        tools.Handle->AddNode();
+      }
+      else if (tools.Handle->IsActive())
+      {
+        tools.Handle->AddNode();
+      }
+    }
 
     if ((event.type == sf::Event::MouseButtonPressed) &&
         (event.mouseButton.button == sf::Mouse::Button::Right)) {
@@ -82,12 +93,7 @@ void InputHandler() {
       tools.menu &= 0b0;
     }
 
-    if ((event.type == sf::Event::MouseButtonPressed) &&
-        (event.mouseButton.button == sf::Mouse::Button::Left)) {
-      if (tools.isKthBitSet(tools.menuselect, 0)) {
-        tools.Handle->AddNode();
-      }
-    }
+    
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
       if (tools.Handle->IsActive()) {
         tools.Handle->FinishNode();
