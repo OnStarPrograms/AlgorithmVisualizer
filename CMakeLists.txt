@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5.0)
 project(Algo VERSION 0.1.0 LANGUAGES C CXX)
 
-set(SFML_DIR "C:/Libraries/SFML-2.5.1/lib/cmake/SFML")
+#set(SFML_DIR "C:/Libraries/SFML-2.5.1/lib/cmake/SFML")
 find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 
 # add_library(ToolBox Toolbox.h)

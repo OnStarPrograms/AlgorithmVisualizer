@@ -18,7 +18,7 @@ int main() {
     // check all the window's events that were triggered since the last
     // iteration of the loop
 
-    if ((tools.menu ^ 0b0) == 0b1) {
+    if (tools.menu == 0b1) {
       RightClickMenu.drawMenu();
       for (int i = 0; i < tools.menuselectsize; i++) {
         // printf("%i \n", tools.menuselect);
@@ -31,8 +31,33 @@ int main() {
       }
     }
     if (tools.Handle->IsActive()) {
+      // If Node Placer is active update the temp Node
       tools.Handle->SetNode();
+    } else {
+
+      std::vector<Node *> noders = tools.Handle->GetNotConnectedNode();
+      for (int i = 1; i < noders.size(); i++) {
+        tools.Handle->SetUnconnectedConnection(noders[i - 1]);
+        tools.Handle->UpdateConnection();
+        /*tools.Handle->SetConnectedConnection(noders[i]); // This Function Connects one node to the other.*/
+        printf("Set Node");
+      }
+      std::vector<Node *> Noders = tools.Handle->GetNotConnectedNode();
+      for (int i = 0; i < Noders.size(); i++) {
+        Noders[i]->ChangeColor(sf::Color(255, 255, 255));
+      }
+
+      // This is a Test For Connecting Nodes, Need to connect Nodes
+      Node *node = tools.Handle->GetConnectedNode();
+      if (node != nullptr) {
+        node->ChangeColor(sf::Color(100, 250, 0)); // Green On Hover
+        for (int i = 0; i < node->ConnectedNodes.size(); i++) {
+          node->ConnectedNodes[i]->ChangeColor(
+              sf::Color(250, 100, 0)); // Red For Connected Nodes
+        }
+      }
     }
+
     InputHandler();
     Render();
   }
@@ -49,11 +74,11 @@ void Render() {
 
   // draw everything here...
   // window.draw(...);
-  while (tools.CircStack.getSize() > 0) {
-    tools.window->draw(tools.CircStack.pop());
-  }
   while (tools.RectStack.getSize() > 0) {
     tools.window->draw(tools.RectStack.pop());
+  }
+  while (tools.CircStack.getSize() > 0) {
+    tools.window->draw(tools.CircStack.pop());
   }
 
   // end the .current frame
@@ -73,14 +98,12 @@ void InputHandler() {
     else if (event.type == sf::Event::Resized)
       tools.window->setView(
           sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
-    
+
     if ((event.type == sf::Event::MouseButtonPressed) &&
         (event.mouseButton.button == sf::Mouse::Button::Left)) {
       if (tools.isKthBitSet(tools.menuselect, 0) && (tools.menu ^ 0b0) == 0b1) {
         tools.Handle->AddNode();
-      }
-      else if (tools.Handle->IsActive())
-      {
+      } else if (tools.Handle->IsActive()) {
         tools.Handle->AddNode();
       }
     }
@@ -93,7 +116,6 @@ void InputHandler() {
       tools.menu &= 0b0;
     }
 
-    
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
       if (tools.Handle->IsActive()) {
         tools.Handle->FinishNode();
