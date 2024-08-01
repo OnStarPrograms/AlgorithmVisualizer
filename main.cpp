@@ -11,49 +11,42 @@ void RightClick();
 int main() {
   // Open the ToolBox
   ToolBox &tools = ToolBox::getInstance();
-  Menu RightClickMenu;
   tools.Handle = new Handler;
   // run the program as long as the window is open
   while (tools.window->isOpen()) {
     // check all the window's events that were triggered since the last
     // iteration of the loop
 
-    if (tools.menu == 0b1) {
-      RightClickMenu.drawMenu();
-      for (int i = 0; i < tools.menuselectsize; i++) {
-        // printf("%i \n", tools.menuselect);
-        if (tools.isKthBitSet(tools.menuselect, i)) {
-          printf(" : %x \n", i);
-          sf::CircleShape circ(30);
-          circ.setFillColor(sf::Color(0 + 100 * i, 100, 100));
-          tools.CircStack.push(circ);
-        }
-      }
-    }
-    if (tools.Handle->IsActive()) {
+    if (tools.Handle->IsNodeSetActive()) {
       // If Node Placer is active update the temp Node
       tools.Handle->SetNode();
+    } else if (tools.Handle->IsConnectionSetActive()) {
+      tools.Handle->UpdateConnection();
     } else {
 
-      std::vector<Node *> noders = tools.Handle->GetNotConnectedNode();
-      for (int i = 1; i < noders.size(); i++) {
-        tools.Handle->SetUnconnectedConnection(noders[i - 1]);
-        tools.Handle->UpdateConnection();
-        /*tools.Handle->SetConnectedConnection(noders[i]); // This Function Connects one node to the other.*/
-        printf("Set Node");
-      }
+      // printf("Before Connections");
       std::vector<Node *> Noders = tools.Handle->GetNotConnectedNode();
       for (int i = 0; i < Noders.size(); i++) {
         Noders[i]->ChangeColor(sf::Color(255, 255, 255));
       }
+      // printf("After Connections");
 
       // This is a Test For Connecting Nodes, Need to connect Nodes
-      Node *node = tools.Handle->GetConnectedNode();
-      if (node != nullptr) {
-        node->ChangeColor(sf::Color(100, 250, 0)); // Green On Hover
-        for (int i = 0; i < node->ConnectedNodes.size(); i++) {
-          node->ConnectedNodes[i]->ChangeColor(
-              sf::Color(250, 100, 0)); // Red For Connected Nodes
+      Node *_node = tools.Handle->GetConnectedNode();
+      if (_node != nullptr) {
+        _node->ChangeColor(sf::Color(100, 250, 0)); // Green On Hover
+        // printf("Green Works");
+        std::vector<Node *> Conns = _node->GetConnectedNode();
+        for (int i = 0; i < Conns.size(); i++) {
+          try {
+            // if (Conns[i] != nullptr)
+            Node TempConnect = *Conns[i];
+            TempConnect.ChangeColor(
+                sf::Color(250, 100, 0)); // Red For Connected Nodes
+            //  printf("Red Works");
+          } catch (...) {
+            printf("Sorry there was an error");
+          }
         }
       }
     }
@@ -79,8 +72,26 @@ void Render() {
   }
   while (tools.CircStack.getSize() > 0) {
     tools.window->draw(tools.CircStack.pop());
+  }  
+  while (tools.aboveCircleStack.getSize() > 0) {
+    tools.window->draw(tools.aboveCircleStack.pop());
   }
-
+  while (tools.TextStack.getSize() > 0) {
+    tools.window->draw(tools.TextStack.pop());
+  }
+  Menu RightClickMenu;
+  if (tools.menu == 0b1) {
+    RightClickMenu.drawMenu();
+    for (int i = 0; i < tools.menuselectsize; i++) {
+      // printf("%i \n", tools.menuselect);
+      if (tools.isKthBitSet(tools.menuselect, i)) {
+        printf(" : %x \n", i);
+        sf::CircleShape circ(30);
+        circ.setFillColor(sf::Color(0 + 100 * i, 100, 100));
+        tools.CircStack.push(circ);
+      }
+    }
+  }
   // end the .current frame
   tools.window->display();
 }
@@ -103,8 +114,11 @@ void InputHandler() {
         (event.mouseButton.button == sf::Mouse::Button::Left)) {
       if (tools.isKthBitSet(tools.menuselect, 0) && (tools.menu ^ 0b0) == 0b1) {
         tools.Handle->AddNode();
-      } else if (tools.Handle->IsActive()) {
+      } else if (tools.Handle->IsNodeSetActive()) {
         tools.Handle->AddNode();
+      }
+      if (tools.isKthBitSet(tools.menuselect, 1) && (tools.menu ^ 0b0) == 0b1) {
+        tools.Handle->AutoConnectNodes();
       }
     }
 
@@ -117,7 +131,7 @@ void InputHandler() {
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape)) {
-      if (tools.Handle->IsActive()) {
+      if (tools.Handle->IsNodeSetActive()) {
         tools.Handle->FinishNode();
       }
     }

@@ -30,35 +30,10 @@ public:
     _Connection->move(_start->getX(), _start->getY());
   };
 
-  int UpdateConnection() {
-    if (!active)
-      return 0;
-    float _math = sqrt(pow(abs((StartNode->getX() - mytools.mousevec.x)), 2) +
-                       pow(abs(StartNode->getY() - mytools.mousevec.y), 2));
-    _Connection->setSize(sf::Vector2f(_math, 2));
-    double rotation = 180 + atan2((StartNode->getY() - mytools.mousevec.y),
-                                  ((StartNode->getX() - mytools.mousevec.x))) *
-                                (180.0 / 3.141592653589793238463);
-    _Connection->setRotation(rotation);
-    _Connection->setPosition(StartNode->getX(), StartNode->getY());
-    return 1;
-  };
-
-  void EndConnection(Node *_EndNode) {
-    active = 0;
-    EndNode = _EndNode;
-    float _math = sqrt(pow(abs((StartNode->getX() - EndNode->getX())), 2) +
-                       pow(abs(StartNode->getY() - EndNode->getY()), 2));
-    _Connection->setSize(sf::Vector2f(_math, 2));
-    float rotation = 180 + atan2((StartNode->getY() - EndNode->getY()),
-                                 ((StartNode->getX() - EndNode->getX()))) *
-                               (180.0 / 3.141592653589793238463);
-    _Connection->setRotation(rotation);
-    _Connection->setPosition(StartNode->getX(), StartNode->getY());
-  }
-
-  sf::RectangleShape *GetDrawable() { return _Connection; }
-  int isactive() { return active; };
+  int UpdateConnection();
+  void EndConnection(Node *_EndNode);
+  sf::RectangleShape *GetDrawable();
+  int isactive();
 
   /*//Node* ConnectedNode1;
     //Node* ConnectedNode2;
