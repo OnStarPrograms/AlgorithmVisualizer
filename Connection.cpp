@@ -27,12 +27,31 @@ void Connection::EndConnection(Node *_EndNode) {
                                ((StartNode->getX() - EndNode->getX()))) *
                              (180.0 / 3.141592653589793238463);
   _Connection->setRotation(rotation);
+  delete WeightText;
+  WeightText = new sf::Text(std::to_string(Weight), mytools.DosFont, 30);
+  WeightText->setPosition(
+      StartNode->getX() + (-1) * ((StartNode->getX() - EndNode->getX()) / 2),
+      StartNode->getY() + -1 * (StartNode->getY() - EndNode->getY()) / 2);
   _Connection->setPosition(StartNode->getX(), StartNode->getY());
 }
 
-sf::RectangleShape *Connection::GetDrawable() { return _Connection; }
+sf::RectangleShape *Connection::GetDrawable() { return _Connection; };
+sf::Text *Connection::GetTextDrawable() {
+
+  delete WeightText;
+  WeightText = new sf::Text(std::to_string(Weight), mytools.DosFont, 30);
+  WeightText->setPosition(
+      StartNode->getX() + (-1) * ((StartNode->getX() - EndNode->getX()) / 2),
+      StartNode->getY() + -1 * (StartNode->getY() - EndNode->getY()) / 2);
+  _Connection->setPosition(StartNode->getX(), StartNode->getY());
+  WeightText->setFillColor(_Connection->getFillColor());
+  return WeightText;
+};
 int Connection::isactive() { return active; };
 
+void Connection::changeColor(sf::Color color) {
+  _Connection->setFillColor(color);
+};
 /*//Node* ConnectedNode1;
   //Node* ConnectedNode2;
   int numOfData = 0;

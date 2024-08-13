@@ -1,3 +1,6 @@
+TOFIX:::: rebuild the entire connection system, its janky af, FIX THE NODE CONNECTIONS AND THE CONNECTIONS YOU BITCH.
+
+
 ##Menu.h
 This is the right click menu 
     menu handles its own hovering events and changes the "menuselect" bit string in toolbox

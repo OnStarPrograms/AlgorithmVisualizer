@@ -1,6 +1,8 @@
 #include "Handler.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <vector>
 
 Handler::Handler() { ; };
 
@@ -92,9 +94,12 @@ void Handler::UpdateConnection() {
 void Handler::DrawHandles() {
   for (int i = 0; i < Nodes.size(); i++) {
     tools.CircStack.push(*Nodes[i]->GetDrawable());
-  }
-  for (int i = 0; i < Connections.size(); i++) {
-    tools.RectStack.push(*Connections[i].GetDrawable());
+    std::vector<Connection *> Connects_ = Nodes[i]->getConnectedConnects();
+    for (int i = 0; i < Connects_.size(); i++) {
+      tools.RectStack.push(*Connects_[i]->GetDrawable());
+      tools.TextStack.push(*Connects_[i]->GetTextDrawable());
+      //printf("%i", Connects_[i]->GetWeight());
+    }
   }
 };
 
@@ -112,16 +117,40 @@ Node *Handler::GetConnectedNode() {
 
 bool Handler::SetUnconnectedConnection(Node *fir_node) {
   SelectedNode = fir_node;
-  ActiveConnection = new Connection(fir_node);
-  Connections.push_back(*ActiveConnection);
   return 0;
 };
 
 bool Handler::SetConnectedConnection(Node *sec_node) {
   if (SelectedNode != nullptr) {
-    SelectedNode->addConnectedNode(sec_node);
-    sec_node->addConnectedNode(SelectedNode);
-    ActiveConnection->EndConnection(sec_node);
+    printf("-----\n");
+
+    std::vector<Connection *> Connects = SelectedNode->getConnectedConnects();
+    bool trig = 0;
+    for (int i = 0; i < Connects.size(); i++) {
+      if (Connects[i]->getEndNode() == sec_node && Connects[i]->getStartNode() == SelectedNode) {
+        SelectedNode->addWeight(1, Connects[i]);
+        trig = 1;
+        printf("AntiTrigged");
+      };
+      if (Connects[i]->getStartNode() == sec_node && Connects[i]->getEndNode() == SelectedNode) { 
+        sec_node->addWeight(1, Connects[i]);
+        trig = 1;
+      };
+      //if (Connects[i]->getEndNode() == ) {
+        //SelectedNode->addWeight(1, Connects[i]);
+        //trig = 1;
+      //};
+    };
+    if (trig != 1) {
+      printf("Trigged");
+      ActiveConnection = new Connection(SelectedNode);
+      SelectedNode->addConnectionBlock(ActiveConnection);
+      sec_node->addConnectionBlock(ActiveConnection);
+      SelectedNode->addConnectedNode(sec_node);
+      sec_node->addConnectedNode(SelectedNode);
+      ActiveConnection->EndConnection(sec_node);
+    }
+
     SelectedNode = nullptr;
   }
   return 0;
@@ -130,5 +159,32 @@ bool Handler::SetConnectedConnection(Node *sec_node) {
 bool Handler::SetConnectedConnection(Node *fir_node, Node *sec_node) {
   fir_node->addConnectedNode(sec_node);
   sec_node->addConnectedNode(fir_node);
+  return 0;
+};
+
+bool Handler::CleanConnections() {
+  int i = 0;
+  int j = 0;
+  for (auto it : Nodes) {
+    while (i < it->getConnectedConnects().size()) {
+      while (j < it->getConnectedConnects().size()) {
+        if (it->getConnectedConnects()[i]->getEndNode()->getX() ==
+                it->getConnectedConnects()[j]->getEndNode()->getX() &&
+            i != j) {
+          it->getConnectedConnects()[i] +=
+              it->getConnectedConnects()[j]->GetWeight();
+          Connections.erase(Connections.begin() + j);
+          printf("%i", it->getConnectedConnects()[i]->GetWeight());
+          j--;
+          i--;
+        }
+        j++;
+        i++;
+      }
+    }
+    j = 0;
+    i = 0;
+  }
+
   return 0;
 };

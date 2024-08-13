@@ -25,9 +25,16 @@ int main() {
     } else {
 
       // printf("Before Connections");
+      std::vector<Connection *> ActiveConnections;
       std::vector<Node *> Noders = tools.Handle->GetNotConnectedNode();
       for (int i = 0; i < Noders.size(); i++) {
         Noders[i]->ChangeColor(sf::Color(255, 255, 255));
+        ActiveConnections = Noders[i]->getConnectedConnects();
+        // printf("Green Works");
+        for (auto i : ActiveConnections) {
+          i->changeColor(sf::Color(255, 255, 255));
+        }
+        tools.Handle->CleanConnections();
       }
       // printf("After Connections");
 
@@ -35,18 +42,20 @@ int main() {
       Node *_node = tools.Handle->GetConnectedNode();
       if (_node != nullptr) {
         _node->ChangeColor(sf::Color(100, 250, 0)); // Green On Hover
+        ActiveConnections = _node->getConnectedConnects();
         // printf("Green Works");
+        for (auto i : ActiveConnections) {
+          i->changeColor(sf::Color(100, 250, 0));
+        }
         std::vector<Node *> Conns = _node->GetConnectedNode();
         for (int i = 0; i < Conns.size(); i++) {
-          try {
-            // if (Conns[i] != nullptr)
-            Node TempConnect = *Conns[i];
-            TempConnect.ChangeColor(
-                sf::Color(250, 100, 0)); // Red For Connected Nodes
-            //  printf("Red Works");
-          } catch (...) {
-            printf("Sorry there was an error");
-          }
+          // if (Conns[i] != nullptr)
+          Node TempConnect = *Conns[i];
+          TempConnect.ChangeColor(
+              sf::Color(250, 100, 0)); // Red For Connected Nodes
+          //  printf("Red Works");
+          ActiveConnections = TempConnect.getConnectedConnects();
+          // printf("Green Works");
         }
       }
     }
@@ -72,7 +81,7 @@ void Render() {
   }
   while (tools.CircStack.getSize() > 0) {
     tools.window->draw(tools.CircStack.pop());
-  }  
+  }
   while (tools.aboveCircleStack.getSize() > 0) {
     tools.window->draw(tools.aboveCircleStack.pop());
   }
@@ -85,7 +94,7 @@ void Render() {
     for (int i = 0; i < tools.menuselectsize; i++) {
       // printf("%i \n", tools.menuselect);
       if (tools.isKthBitSet(tools.menuselect, i)) {
-        printf(" : %x \n", i);
+        // printf(" : %x \n", i);
         sf::CircleShape circ(30);
         circ.setFillColor(sf::Color(0 + 100 * i, 100, 100));
         tools.CircStack.push(circ);
@@ -119,6 +128,14 @@ void InputHandler() {
       }
       if (tools.isKthBitSet(tools.menuselect, 1) && (tools.menu ^ 0b0) == 0b1) {
         tools.Handle->AutoConnectNodes();
+        tools.Handle->CleanConnections();
+        // tools.Handle->CleanConnections();
+      }
+      if (tools.isKthBitSet(tools.menuselect, 2) && (tools.menu ^ 0b0) == 0b1) {
+        // This is to start node Connects.
+        tools.Handle->AutoConnectNodes();
+        tools.Handle->CleanConnections();
+        // tools.Handle->CleanConnections();
       }
     }
 

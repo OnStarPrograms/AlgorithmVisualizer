@@ -8,7 +8,8 @@ private:
   sf::RectangleShape *_Connection;
   Node *StartNode;
   Node *EndNode;
-  int Weight = 0;
+  int Weight = 1;
+  sf::Text* WeightText = new sf::Text(std::to_string(Weight), mytools.DosFont, 30);
   int active = 0;
   ToolBox mytools = ToolBox::getInstance();
 
@@ -34,7 +35,14 @@ public:
   void EndConnection(Node *_EndNode);
   sf::RectangleShape *GetDrawable();
   int isactive();
-
+  void changeColor(sf::Color color);
+  Node* getStartNode(){return StartNode;};
+  Node* getEndNode(){return EndNode;};
+  int GetWeight(){return Weight;};
+  void addWeight(int num){
+    Weight+=num;
+  }
+  sf::Text *GetTextDrawable();
   /*//Node* ConnectedNode1;
     //Node* ConnectedNode2;
     int numOfData = 0;
